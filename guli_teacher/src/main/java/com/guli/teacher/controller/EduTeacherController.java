@@ -3,8 +3,10 @@ package com.guli.teacher.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.common.result.Result;
+import com.guli.common.result.ResultCode;
 import com.guli.teacher.entity.EduTeacher;
 import com.guli.teacher.entity.query.TeacherQuery;
+import com.guli.teacher.exception.EduException;
 import com.guli.teacher.service.EduTeacherService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -33,6 +35,9 @@ public class EduTeacherController {
     @ApiOperation(value = "所有讲师列表")
     @GetMapping("list")
     public Result list() {
+
+        //int i = 1 / 0;
+
         try {
             List<EduTeacher> list = teacherService.list(null);
             return Result.ok().data("items", list);
@@ -97,10 +102,10 @@ public class EduTeacherController {
         }
         return Result.error();
     }
-    
+
     @ApiOperation(value = "保存讲师对象")
     @PostMapping("save")
-    public Result saveTeacher(@RequestBody EduTeacher teacher){
+    public Result saveTeacher(@RequestBody EduTeacher teacher) {
         try {
             teacherService.save(teacher);
             return Result.ok();
@@ -109,12 +114,20 @@ public class EduTeacherController {
             return Result.error();
         }
     }
-    
+
     @ApiOperation(value = "根据ID查询")
     @GetMapping("/{id}")
     public Result saveTeacherById(
             @ApiParam(name = "id", value = "讲师Id", required = true)
             @PathVariable String id) {
+
+        /* 当我们的业务被非法参数操作时，我们可以自定义异常(业务异常) 
+        EduTeacher teacher = teacherService.getById(id);
+        if (teacher == null) {
+            throw new EduException(ResultCode.EDU_ID_ERROR, "没有此讲师信息");
+        }
+        */
+
         try {
             EduTeacher teacher = teacherService.getById(id);
             return Result.ok().data("teacher", teacher);
@@ -127,7 +140,7 @@ public class EduTeacherController {
 
     @ApiOperation(value = "修改讲师信息")
     @PutMapping("update")
-    public Result selectTeacherById(@RequestBody EduTeacher teacher){
+    public Result selectTeacherById(@RequestBody EduTeacher teacher) {
         try {
             teacherService.updateById(teacher);
             return Result.ok();
