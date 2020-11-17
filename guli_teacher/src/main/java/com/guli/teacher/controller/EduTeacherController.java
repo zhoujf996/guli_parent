@@ -1,6 +1,7 @@
 package com.guli.teacher.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.common.result.Result;
 import com.guli.teacher.entity.EduTeacher;
 import com.guli.teacher.service.EduTeacherService;
@@ -56,5 +57,23 @@ public class EduTeacherController {
         }
         return Result.error();
     }
+
+    @ApiOperation(value = "讲师分页列表")
+    @GetMapping("/{page}/{limit}")
+    public Result selectTeacherByPage(
+            @ApiParam(name = "page", value = "当前页", required = true)
+            @PathVariable(value = "page") Integer page,
+            @ApiParam(name = "limit", value = "每页显示记录数", required = true)
+            @PathVariable(value = "limit") Integer limit) {
+        try {
+            Page<EduTeacher> teacherPage = new Page<EduTeacher>(page, limit);
+            teacherService.page(teacherPage, null);
+            return Result.ok().data("total", teacherPage.getTotal()).data("rows", teacherPage.getRecords());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.error();
+    }
+
 
 }
