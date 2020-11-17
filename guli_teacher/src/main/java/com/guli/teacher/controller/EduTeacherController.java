@@ -31,7 +31,7 @@ public class EduTeacherController {
     private EduTeacherService teacherService;
 
     @ApiOperation(value = "所有讲师列表")
-    @GetMapping("/list")
+    @GetMapping("list")
     public Result list() {
         try {
             List<EduTeacher> list = teacherService.list(null);
@@ -90,11 +90,51 @@ public class EduTeacherController {
 
         try {
             Page<EduTeacher> teacherPage = new Page<EduTeacher>(page, limit);
-            teacherService.pageQuery(teacherPage,query);
+            teacherService.pageQuery(teacherPage, query);
             return Result.ok().data("total", teacherPage.getTotal()).data("rows", teacherPage.getRecords());
         } catch (Exception e) {
             e.printStackTrace();
         }
         return Result.error();
     }
+    
+    @ApiOperation(value = "保存讲师对象")
+    @PostMapping("save")
+    public Result saveTeacher(@RequestBody EduTeacher teacher){
+        try {
+            teacherService.save(teacher);
+            return Result.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error();
+        }
+    }
+    
+    @ApiOperation(value = "根据ID查询")
+    @GetMapping("/{id}")
+    public Result saveTeacherById(
+            @ApiParam(name = "id", value = "讲师Id", required = true)
+            @PathVariable String id) {
+        try {
+            EduTeacher teacher = teacherService.getById(id);
+            return Result.ok().data("teacher", teacher);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.error();
+    }
+
+
+    @ApiOperation(value = "修改讲师信息")
+    @PutMapping("update")
+    public Result selectTeacherById(@RequestBody EduTeacher teacher){
+        try {
+            teacherService.updateById(teacher);
+            return Result.ok();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error();
+        }
+    }
+
 }
