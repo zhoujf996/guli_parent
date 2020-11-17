@@ -1,6 +1,7 @@
 package com.guli.teacher.controller;
 
 
+import com.guli.common.result.Result;
 import com.guli.teacher.entity.EduTeacher;
 import com.guli.teacher.service.EduTeacherService;
 import io.swagger.annotations.Api;
@@ -29,8 +30,14 @@ public class EduTeacherController {
 
     @ApiOperation(value = "所有讲师列表")
     @GetMapping("/list")
-    public List<EduTeacher> list() {
-        return teacherService.list(null);
+    public Result list() {
+        try {
+            List<EduTeacher> list = teacherService.list(null);
+            return Result.ok().data("items", list);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.error();
     }
 
     //删除
@@ -38,16 +45,16 @@ public class EduTeacherController {
     @DeleteMapping("/{id}")//占位符:
     //1.如果占位符中的参数名和形参名一致的话那么@PathVariable可以省略
     //2.如果配置了Swagger、并在形参前加了其他注解，那么@PathVariable必须加;
-    public boolean deleteTeacherById(
-            @ApiParam(name = "id", value = "讲师Id", required = true) 
+    public Result deleteTeacherById(
+            @ApiParam(name = "id", value = "讲师Id", required = true)
             @PathVariable String id) {
         try {
             teacherService.removeById(id);
-            return true;
+            return Result.ok();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+        return Result.error();
     }
 
 }
