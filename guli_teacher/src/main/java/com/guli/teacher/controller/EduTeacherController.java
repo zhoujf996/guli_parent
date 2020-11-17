@@ -4,6 +4,7 @@ package com.guli.teacher.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.common.result.Result;
 import com.guli.teacher.entity.EduTeacher;
+import com.guli.teacher.entity.query.TeacherQuery;
 import com.guli.teacher.service.EduTeacherService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -75,5 +76,25 @@ public class EduTeacherController {
         return Result.error();
     }
 
+    //条件查询的分页
+    //1.有分页
+    //2.有条件：根据讲师名称，讲师等级，创建时间，修改时间
+    @ApiOperation(value = "根据讲师条件分页查询")
+    @PostMapping("/{page}/{limit}")
+    public Result selectTeacherByPageWrapper(
+            @ApiParam(name = "page", value = "当前页", required = true)
+            @PathVariable(value = "page") Integer page,
+            @ApiParam(name = "limit", value = "每页显示记录数", required = true)
+            @PathVariable(value = "limit") Integer limit,
+            @RequestBody TeacherQuery query) {
 
+        try {
+            Page<EduTeacher> teacherPage = new Page<EduTeacher>(page, limit);
+            teacherService.pageQuery(teacherPage,query);
+            return Result.ok().data("total", teacherPage.getTotal()).data("rows", teacherPage.getRecords());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Result.error();
+    }
 }
