@@ -150,5 +150,4 @@ public class EduTeacherController {
             return Result.error();
         }
     }
-
 }
