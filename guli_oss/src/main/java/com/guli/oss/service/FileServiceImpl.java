@@ -4,14 +4,23 @@ import com.aliyun.oss.OSSClient;
 import com.guli.oss.util.ConstantPropertiesUtil;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.UUID;
 
 @Service
-public class FileServiceImpl implements FileService{
+public class FileServiceImpl implements FileService {
+
+    private static String[] TYPESTR = {".png", ".jpg", ".bmp", ".gif", ".jepg"};
+
+
     @Override
     public String upload(MultipartFile file) {
         OSSClient ossClient = null;
@@ -24,9 +33,26 @@ public class FileServiceImpl implements FileService{
                     ConstantPropertiesUtil.ACCESS_KEY_SECRET);
 
             //判断文件格式
+            boolean flag = false;
 
+            for (String type : TYPESTR) {
+                if (StringUtils.endsWithIgnoreCase(file.getOriginalFilename(), type)) {
+                    flag = true;
+                    break;
+                }
+            }
+            
+            if(!flag){
+                return "图片格式不正确";
+            }
             //判断文件内容
-
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            if (image != null) {
+                System.out.println(String.valueOf(image.getHeight()));
+                System.out.println(String.valueOf(image.getWidth()));
+            } else {
+                return "文件内容不正确！";
+            }
             //获取文件名称
             String filename = file.getOriginalFilename();
             //文件名字： lijin.shuai.jpg
@@ -37,7 +63,7 @@ public class FileServiceImpl implements FileService{
             // 上传文件流。
             InputStream inputStream = file.getInputStream();
             ossClient.putObject(ConstantPropertiesUtil.BUCKET_NAME, urlPath, inputStream);
-            url = "https://"+ConstantPropertiesUtil.BUCKET_NAME + "." + ConstantPropertiesUtil.END_POINT + "/" + urlPath;
+            url = "https://" + ConstantPropertiesUtil.BUCKET_NAME + "." + ConstantPropertiesUtil.END_POINT + "/" + urlPath;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
