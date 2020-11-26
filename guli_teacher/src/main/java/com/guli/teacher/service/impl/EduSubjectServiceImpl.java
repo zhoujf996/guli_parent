@@ -1,7 +1,10 @@
 package com.guli.teacher.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.guli.teacher.entity.EduSubject;
+import com.guli.teacher.entity.vo.OneSubject;
+import com.guli.teacher.entity.vo.TwoSubject;
 import com.guli.teacher.mapper.EduSubjectMapper;
 import com.guli.teacher.service.EduSubjectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -10,6 +13,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +34,7 @@ import java.util.Queue;
  */
 @Service
 public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubject> implements EduSubjectService {
-    
+
     @Override
     public List<String> importExcel(MultipartFile file) {
         //存储错误信息集合
@@ -111,6 +115,7 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         return meg;
     }
 
+
     /**
      * 根据二级分类名称和parentID查询是否存在Subject
      *
@@ -138,5 +143,43 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         wrapper.eq("parent_id", 0);
         EduSubject subject = baseMapper.selectOne(wrapper);
         return subject;
+    }
+
+
+    /**
+     * 获取课程分类的Tree
+     *
+     * @return
+     */
+    @Override
+    public List<OneSubject> getTree() {
+
+        //1.创建一个集合存放OneSubject
+        List<OneSubject> oneSubjectList = new ArrayList<>();
+        //2.获取一级分类的列表
+        QueryWrapper<EduSubject> wrapper = new QueryWrapper<>();
+        wrapper.eq("parent_id", 0);
+        List<EduSubject> eduSubjectList = baseMapper.selectList(wrapper);
+        //3.把一级分类对象复制到OneSubject
+        for (EduSubject subject : eduSubjectList) {
+            //4.遍历一级分类的列表
+            OneSubject oneSubject = new OneSubject();
+            BeanUtils.copyProperties(subject, oneSubject);
+            //5.根据每一个一级分类获取二级分类的列表
+            QueryWrapper<EduSubject> wr = new QueryWrapper<>();
+            wr.eq("parent_id", oneSubject.getId());
+            List<EduSubject> eduSubjects = baseMapper.selectList(wr);
+            //6.遍历二级分类列表
+            for (EduSubject su : eduSubjects) {
+                //7.把二级分类对象复制到TwoSubject
+                TwoSubject twoSubject = new TwoSubject();
+                BeanUtils.copyProperties(su, twoSubject);
+                //8.把TwoSubject添加到OneSubject的children集合中
+                oneSubject.getChildren().add(twoSubject);
+            }
+            //9.把OneSubject添加到集合中
+            oneSubjectList.add(oneSubject);
+        }
+        return oneSubjectList;
     }
 }
