@@ -182,4 +182,20 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         }
         return oneSubjectList;
     }
+
+    @Override
+    public boolean deleteById(String id) {
+
+        // 根据ID查询数据库中是否存在此ID为ParentId（二级分类）
+        QueryWrapper<EduSubject> wrapper = new QueryWrapper<>();
+        wrapper.eq("parent_id", id);
+        List<EduSubject> subjectList = baseMapper.selectList(wrapper);
+        if (subjectList.size() != 0) {
+            //如果有，返回false
+            return false;
+        }
+        int i = baseMapper.deleteById(id);
+        // 如果没有直接删除并返回他true
+        return i == 1;
+    }
 }

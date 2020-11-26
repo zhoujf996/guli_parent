@@ -51,5 +51,20 @@ public class EduSubjectController {
         List<OneSubject> subjectList = subjectService.getTree();
         return Result.ok().data("subjectList", subjectList);
     }
+
+
+    /**
+     * 可以查一下什么时候用@PathVariable
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public Result deleteById(@PathVariable String id) {
+        boolean b = subjectService.deleteById(id);
+        if(b){
+            return Result.ok();
+        }else{
+            return Result.error();
+        }
+    }
 }
 
