@@ -1,10 +1,15 @@
 package com.guli.teacher.controller;
 
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.guli.common.result.Result;
+import com.guli.teacher.entity.EduCourse;
+import com.guli.teacher.entity.EduCourseDescription;
+import com.guli.teacher.entity.vo.CourseVo;
+import com.guli.teacher.service.EduCourseDescriptionService;
+import com.guli.teacher.service.EduCourseService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -18,6 +23,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/course")
 @CrossOrigin
 public class EduCourseController {
+
+    @Autowired
+    private EduCourseService courseService;
+
+
+    @Autowired
+    private EduCourseDescriptionService courseDescriptionService;
+
+    /**
+     * 保存基本信息
+     */
+    @PostMapping("save")
+    @Transactional
+    public Result save(@RequestBody CourseVo vo) {
+        String courseId = courseService.saveVo(vo);
+        return Result.ok().data("id", courseId);
+    }
+
 
 }
 
