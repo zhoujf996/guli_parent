@@ -25,25 +25,24 @@ import java.util.List;
 @RequestMapping("/subject")
 @CrossOrigin
 public class EduSubjectController {
-
     @Autowired
     private EduSubjectService subjectService;
 
     @PostMapping("import")
     public Result importSubject(MultipartFile file) {
-
-        //因为考虑到Excel模板中数据不准确，所有返回多个错误信息，那么多个错误信息放在集合中
+        // 因为考虑到EXCL模板中数据不准确所以返回多个错误信息，那么多个错误信息放在集合中
         List<String> mesList = subjectService.importExcel(file);
-
         if (mesList.size() == 0) {
             return Result.ok();
         } else {
-            return Result.ok().data("messageList", mesList);
+            return Result.error().data("messageList", mesList);
         }
+
     }
 
     /**
      * 获取课程分类的Tree
+     *
      * @return
      */
     @GetMapping("tree")
@@ -52,17 +51,39 @@ public class EduSubjectController {
         return Result.ok().data("subjectList", subjectList);
     }
 
-
     /**
-     * 可以查一下什么时候用@PathVariable
+     * 可以查一下，什么时候用@PathVariable
+     *
+     * @param id
      * @return
      */
     @DeleteMapping("/{id}")
     public Result deleteById(@PathVariable String id) {
         boolean b = subjectService.deleteById(id);
-        if(b){
+        if (b) {
             return Result.ok();
-        }else{
+        } else {
+            return Result.error();
+        }
+
+    }
+
+    @PostMapping("saveLevelOne")
+    public Result saveLevelOne(@RequestBody EduSubject subject) {
+        Boolean flag = subjectService.saveLevelOne(subject);
+        if (flag) {
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @PostMapping("saveLevelTwo")
+    public Result saveLevelTwo(@RequestBody EduSubject subject) {
+        Boolean flag = this.subjectService.saveLevelTwo(subject);
+        if (flag) {
+            return Result.ok();
+        } else {
             return Result.error();
         }
     }

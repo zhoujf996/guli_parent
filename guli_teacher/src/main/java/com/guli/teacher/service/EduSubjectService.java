@@ -36,4 +36,8 @@ public interface EduSubjectService extends IService<EduSubject> {
      * @return
      */
     boolean deleteById(String id);
+
+    Boolean saveLevelOne(EduSubject subject);
+
+    Boolean saveLevelTwo(EduSubject subject);
 }

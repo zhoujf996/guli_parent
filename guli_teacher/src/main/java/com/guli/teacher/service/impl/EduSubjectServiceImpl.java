@@ -34,9 +34,9 @@ import java.util.Queue;
  */
 @Service
 public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubject> implements EduSubjectService {
-
     @Override
     public List<String> importExcel(MultipartFile file) {
+
         //存储错误信息集合
         List<String> meg = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
                 return meg;
             }
             //5、遍历行
-            for (int rowNum = 1; rowNum < lastRowNum; rowNum++) {
+            for (int rowNum = 1; rowNum <= lastRowNum; rowNum++) {
                 Row row = sheet.getRow(rowNum);
                 //6、获取每一行中第一列： 一级分类
                 Cell cell = row.getCell(0);
@@ -114,7 +114,7 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         }
         return meg;
     }
-
+    
 
     /**
      * 根据二级分类名称和parentID查询是否存在Subject
@@ -146,40 +146,37 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
     }
 
 
-    /**
-     * 获取课程分类的Tree
-     *
-     * @return
-     */
     @Override
     public List<OneSubject> getTree() {
 
-        //1.创建一个集合存放OneSubject
+        // 1、创建一个集合存放OneSubject
         List<OneSubject> oneSubjectList = new ArrayList<>();
-        //2.获取一级分类的列表
+        // 2、获取一级分类的列表
         QueryWrapper<EduSubject> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", 0);
         List<EduSubject> eduSubjectList = baseMapper.selectList(wrapper);
-        //3.把一级分类对象复制到OneSubject
+        // 3、遍历一级分类的列表
         for (EduSubject subject : eduSubjectList) {
-            //4.遍历一级分类的列表
+            //4、一级分类的数据复制到OneSubject
             OneSubject oneSubject = new OneSubject();
             BeanUtils.copyProperties(subject, oneSubject);
-            //5.根据每一个一级分类获取二级分类的列表
+            //5、根据每一个一级分类获取二级分类的列表
             QueryWrapper<EduSubject> wr = new QueryWrapper<>();
             wr.eq("parent_id", oneSubject.getId());
             List<EduSubject> eduSubjects = baseMapper.selectList(wr);
-            //6.遍历二级分类列表
+            // 6、遍历二级分类列表
             for (EduSubject su : eduSubjects) {
-                //7.把二级分类对象复制到TwoSubject
+                //7、把二级分类对象复制到TwoSubject
                 TwoSubject twoSubject = new TwoSubject();
                 BeanUtils.copyProperties(su, twoSubject);
-                //8.把TwoSubject添加到OneSubject的children集合中
+                //8、 把TwoSubject添加OneSubject 的children集合中
                 oneSubject.getChildren().add(twoSubject);
             }
-            //9.把OneSubject添加到集合中
+
+            // 9、把OneSubject添加到集合中
             oneSubjectList.add(oneSubject);
         }
+
         return oneSubjectList;
     }
 
@@ -197,5 +194,33 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         int i = baseMapper.deleteById(id);
         // 如果没有直接删除并返回他true
         return i == 1;
+    }
+
+    @Override
+    public Boolean saveLevelOne(EduSubject subject) {
+
+        //1、根据这个title判断一下一级分类是否存在
+        EduSubject eduSubject = this.selectSubjectByName(subject.getTitle());
+        //存在直接返回false
+        if (eduSubject != null) {
+            return false;
+        }
+        //不存在保存到数据库并返回true
+        subject.setSort(0);
+        int insert = baseMapper.insert(subject);
+        return insert == 1;
+    }
+
+    @Override
+    public Boolean saveLevelTwo(EduSubject subject) {
+
+        //判断此一级分类中是否存在此二级分类的title
+        EduSubject sub = this.selectSubjectByNameAndParentId(subject.getTitle(), subject.getParentId());
+        if (sub != null) {
+            //存在
+            return false;
+        }
+        int insert = baseMapper.insert(subject);
+        return insert == 1;
     }
 }
