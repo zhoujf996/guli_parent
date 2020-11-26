@@ -41,7 +41,7 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         List<String> meg = new ArrayList<>();
 
         try {
-            //1、 获取文件流
+            //1、先获取文件流
             InputStream inputStream = file.getInputStream();
             //2、根据这流创建一个workBook
             Workbook workbook = new HSSFWorkbook(inputStream);
