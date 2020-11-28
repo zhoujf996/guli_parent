@@ -1,6 +1,7 @@
 package com.guli.teacher.controller;
 
 
+import com.baomidou.mybatisplus.extension.api.R;
 import com.guli.common.result.Result;
 import com.guli.teacher.entity.EduCourse;
 import com.guli.teacher.entity.EduCourseDescription;
@@ -48,6 +49,20 @@ public class EduCourseController {
         CourseVo vo = courseService.getCourseVoById(id);
         return Result.ok().data("courseInfo", vo);
     }
+
+    /**
+     * 修改课程基本信息
+     */
+    @PutMapping("updateVo")
+    public Result updateVo(@RequestBody CourseVo vo){
+        Boolean flag=courseService.updateVo(vo);
+        if(flag){
+            return Result.ok();
+        }else{
+            return Result.error();
+        }
+    }
+    
 
 }
 

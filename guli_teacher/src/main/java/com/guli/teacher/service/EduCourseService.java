@@ -16,6 +16,7 @@ public interface EduCourseService extends IService<EduCourse> {
 
     /**
      * 保存课程基本信息
+     *
      * @param vo
      * @return
      */
@@ -23,8 +24,18 @@ public interface EduCourseService extends IService<EduCourse> {
 
     /**
      * 根据课程ID查询课程基本信息和描述
+     *
      * @param id
      * @return
      */
     CourseVo getCourseVoById(String id);
+
+
+    /**
+     * 修改课程基本信息
+     *
+     * @param vo
+     * @return
+     */
+    Boolean updateVo(CourseVo vo);
 }

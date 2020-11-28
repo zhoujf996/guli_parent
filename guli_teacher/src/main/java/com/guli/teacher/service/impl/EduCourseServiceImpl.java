@@ -1,15 +1,16 @@
 package com.guli.teacher.service.impl;
 
-        import com.guli.teacher.entity.EduCourse;
-        import com.guli.teacher.entity.EduCourseDescription;
-        import com.guli.teacher.entity.vo.CourseVo;
-        import com.guli.teacher.mapper.EduCourseMapper;
-        import com.guli.teacher.service.EduCourseDescriptionService;
-        import com.guli.teacher.service.EduCourseService;
-        import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
-        import org.springframework.transaction.annotation.Transactional;
+import com.guli.teacher.entity.EduCourse;
+import com.guli.teacher.entity.EduCourseDescription;
+import com.guli.teacher.entity.vo.CourseVo;
+import com.guli.teacher.mapper.EduCourseMapper;
+import com.guli.teacher.service.EduCourseDescriptionService;
+import com.guli.teacher.service.EduCourseService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  * <p>
@@ -65,5 +66,22 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         }
         vo.setCourseDescription(eduCourseDescription);
         return vo;
+    }
+
+    @Override
+    public Boolean updateVo(CourseVo vo) {
+        //1.判断ID是否存在,如果不存在直接返回false
+        if (StringUtils.isEmpty(vo.getEduCourse().getId())) {
+            return false;
+        }
+        //2.修改course
+        int i = baseMapper.updateById(vo.getEduCourse());
+        if (i <= 0) {
+            return false;
+        }
+        //3.修改courseDesc
+        vo.getCourseDescription().setId(vo.getEduCourse().getId());
+        boolean b = courseDescriptionService.updateById(vo.getCourseDescription());
+        return b;
     }
 }
