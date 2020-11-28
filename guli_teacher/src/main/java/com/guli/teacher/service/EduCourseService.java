@@ -47,4 +47,12 @@ public interface EduCourseService extends IService<EduCourse> {
      * @param courseQuery
      */
     void getPageList(Page<EduCourse> objectPage, CourseQuery courseQuery);
+
+
+    /**
+     * 根据课程ID删除课程信息
+     * @param id
+     * @return
+     */
+    Boolean deleteById(String id);
 }

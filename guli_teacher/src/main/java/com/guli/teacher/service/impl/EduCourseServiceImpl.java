@@ -101,24 +101,46 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         String subjectParentId = courseQuery.getSubjectParentId();
         String teacherId = courseQuery.getTeacherId();
         String title = courseQuery.getTitle();
-        
-        if(!StringUtils.isEmpty(subjectId)){
-            wrapper.eq("subject_id",subjectId);
+
+        if (!StringUtils.isEmpty(subjectId)) {
+            wrapper.eq("subject_id", subjectId);
         }
 
-        if(!StringUtils.isEmpty(subjectParentId)){
-            wrapper.eq("subject_parent_id",subjectParentId);
+        if (!StringUtils.isEmpty(subjectParentId)) {
+            wrapper.eq("subject_parent_id", subjectParentId);
         }
-        
-        if(!StringUtils.isEmpty(teacherId)){
-            wrapper.eq("teacher_id",teacherId);
-        }
-        
-        if(!StringUtils.isEmpty(title)){
-            wrapper.like("title",title);
-        }
-        
-        baseMapper.selectPage(objectPage,wrapper);
 
+        if (!StringUtils.isEmpty(teacherId)) {
+            wrapper.eq("teacher_id", teacherId);
+        }
+
+        if (!StringUtils.isEmpty(title)) {
+            wrapper.like("title", title);
+        }
+
+        baseMapper.selectPage(objectPage, wrapper);
+
+    }
+
+    /**
+     * 根据课程ID删除课程信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Boolean deleteById(String id) {
+        //TODO 删除课程相关的小节
+
+        //TODO 删除课程相关的章节
+
+        //删除描述
+        boolean b = courseDescriptionService.removeById(id);
+        if (!b) {
+            return false;
+        }
+        //删除信息
+        int i = baseMapper.deleteById(id);
+
+        return i == 1;
     }
 }

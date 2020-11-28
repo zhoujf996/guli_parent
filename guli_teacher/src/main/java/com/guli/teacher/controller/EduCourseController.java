@@ -73,12 +73,26 @@ public class EduCourseController {
                               @PathVariable Integer limit,
                               @RequestBody CourseQuery courseQuery) {
 
-        Page<EduCourse> objectPage = new Page<>(page,limit);
-        courseService.getPageList(objectPage,courseQuery);
-        
+        Page<EduCourse> objectPage = new Page<>(page, limit);
+        courseService.getPageList(objectPage, courseQuery);
+
         return Result.ok()
-                .data("rows",objectPage.getRecords())
-                .data("total",objectPage.getTotal());
+                .data("rows", objectPage.getRecords())
+                .data("total", objectPage.getTotal());
+    }
+
+
+    /**
+     * 根据课程ID删除课程信息
+     */
+    @DeleteMapping("{id}")
+    public Result DeleteById(@PathVariable String id) {
+        Boolean flag = courseService.deleteById(id);
+        if (flag) {
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
     }
 }
 
