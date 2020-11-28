@@ -27,20 +27,18 @@ public class EduCourseController {
     @Autowired
     private EduCourseService courseService;
 
-
     @Autowired
     private EduCourseDescriptionService courseDescriptionService;
 
     /**
      * 保存基本信息
      */
-    @PostMapping("save")
+    @PostMapping("saveVo")
     @Transactional
     public Result save(@RequestBody CourseVo vo) {
         String courseId = courseService.saveVo(vo);
         return Result.ok().data("id", courseId);
     }
-
 
 }
 

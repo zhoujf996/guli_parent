@@ -22,22 +22,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse> implements EduCourseService {
-    
+
     @Autowired
     private EduCourseDescriptionService courseDescriptionService;
-    
-    
+
     @Override
     public String saveVo(CourseVo vo) {
-        
+
         //1、添加课程
-        baseMapper.insert(vo.getCourse());
+        baseMapper.insert(vo.getEduCourse());
         //2、获取课程ID
-         String courseId = vo.getCourse().getId();
-        //3.添加课程描述
-        vo.getEduCourseDescription().setId(courseId);
-        courseDescriptionService.save(vo.getEduCourseDescription());
-       
+        String courseId = vo.getEduCourse().getId();
+        //3、添加课程描述
+        vo.getCourseDescription().setId(courseId);
+        courseDescriptionService.save(vo.getCourseDescription());
+
         return courseId;
     }
 }

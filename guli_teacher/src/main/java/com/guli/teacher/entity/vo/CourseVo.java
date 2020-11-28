@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class CourseVo {
     
-    private EduCourse course;
-    
-    private EduCourseDescription eduCourseDescription;
+    private EduCourse eduCourse;
+
+    private EduCourseDescription courseDescription;
     
 }
