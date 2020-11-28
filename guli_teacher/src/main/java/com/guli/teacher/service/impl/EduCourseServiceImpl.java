@@ -1,7 +1,10 @@
 package com.guli.teacher.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.teacher.entity.EduCourse;
 import com.guli.teacher.entity.EduCourseDescription;
+import com.guli.teacher.entity.query.CourseQuery;
 import com.guli.teacher.entity.vo.CourseVo;
 import com.guli.teacher.mapper.EduCourseMapper;
 import com.guli.teacher.service.EduCourseDescriptionService;
@@ -83,5 +86,39 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         vo.getCourseDescription().setId(vo.getEduCourse().getId());
         boolean b = courseDescriptionService.updateById(vo.getCourseDescription());
         return b;
+    }
+
+    @Override
+    public void getPageList(Page<EduCourse> objectPage, CourseQuery courseQuery) {
+
+        QueryWrapper<EduCourse> wrapper = new QueryWrapper<>();
+
+        if (courseQuery == null) {
+            baseMapper.selectPage(objectPage, wrapper);
+        }
+
+        String subjectId = courseQuery.getSubjectId();
+        String subjectParentId = courseQuery.getSubjectParentId();
+        String teacherId = courseQuery.getTeacherId();
+        String title = courseQuery.getTitle();
+        
+        if(!StringUtils.isEmpty(subjectId)){
+            wrapper.eq("subject_id",subjectId);
+        }
+
+        if(!StringUtils.isEmpty(subjectParentId)){
+            wrapper.eq("subject_parent_id",subjectParentId);
+        }
+        
+        if(!StringUtils.isEmpty(teacherId)){
+            wrapper.eq("teacher_id",teacherId);
+        }
+        
+        if(!StringUtils.isEmpty(title)){
+            wrapper.like("title",title);
+        }
+        
+        baseMapper.selectPage(objectPage,wrapper);
+
     }
 }

@@ -1,7 +1,9 @@
 package com.guli.teacher.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.teacher.entity.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.guli.teacher.entity.query.CourseQuery;
 import com.guli.teacher.entity.vo.CourseVo;
 
 /**
@@ -38,4 +40,11 @@ public interface EduCourseService extends IService<EduCourse> {
      * @return
      */
     Boolean updateVo(CourseVo vo);
+
+    /**
+     * 根据搜索条件分页查询 
+     * @param objectPage
+     * @param courseQuery
+     */
+    void getPageList(Page<EduCourse> objectPage, CourseQuery courseQuery);
 }

@@ -2,9 +2,11 @@ package com.guli.teacher.controller;
 
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.common.result.Result;
 import com.guli.teacher.entity.EduCourse;
 import com.guli.teacher.entity.EduCourseDescription;
+import com.guli.teacher.entity.query.CourseQuery;
 import com.guli.teacher.entity.vo.CourseVo;
 import com.guli.teacher.service.EduCourseDescriptionService;
 import com.guli.teacher.service.EduCourseService;
@@ -54,15 +56,29 @@ public class EduCourseController {
      * 修改课程基本信息
      */
     @PutMapping("updateVo")
-    public Result updateVo(@RequestBody CourseVo vo){
-        Boolean flag=courseService.updateVo(vo);
-        if(flag){
+    public Result updateVo(@RequestBody CourseVo vo) {
+        Boolean flag = courseService.updateVo(vo);
+        if (flag) {
             return Result.ok();
-        }else{
+        } else {
             return Result.error();
         }
     }
-    
 
+    /**
+     * 根据搜索条件分页查询
+     */
+    @PostMapping("{page}/{limit}")
+    public Result getPageList(@PathVariable Integer page,
+                              @PathVariable Integer limit,
+                              @RequestBody CourseQuery courseQuery) {
+
+        Page<EduCourse> objectPage = new Page<>(page,limit);
+        courseService.getPageList(objectPage,courseQuery);
+        
+        return Result.ok()
+                .data("rows",objectPage.getRecords())
+                .data("total",objectPage.getTotal());
+    }
 }
 
