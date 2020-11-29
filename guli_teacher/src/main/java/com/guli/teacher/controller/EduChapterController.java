@@ -65,7 +65,17 @@ public class EduChapterController {
             return Result.error();
         }
     }
-
+    
+    @DeleteMapping("{id}")
+    public Result deleteById(@PathVariable String id){
+        Boolean flag=chapterService.removeChapterById(id);
+        
+        if(flag){
+            return Result.ok();
+        }else{
+            return Result.error();
+        }
+    }
 
 }
 

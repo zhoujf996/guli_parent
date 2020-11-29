@@ -96,16 +96,32 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         if (chapter == null) {
             return false;
         }
-        
+
         QueryWrapper<EduChapter> wrapper = new QueryWrapper<>();
         wrapper.eq("title", chapter.getTitle());
         Integer count = baseMapper.selectCount(wrapper);
-        
+
         if (count > 0) {
-            throw new EduException(20001,"章节名称已存在");
+            throw new EduException(20001, "章节名称已存在");
         }
         int i = baseMapper.updateById(chapter);
 
-        return i == 1;  
+        return i == 1;
+    }
+
+    @Override
+    public Boolean removeChapterById(String id) {
+        //1.判断章节的ID下面是否存在小节
+        QueryWrapper<EduVideo> wrapper = new QueryWrapper<>();
+        wrapper.eq("chapter_id", id);
+        List<EduVideo> list = eduVideoService.list(wrapper);
+        //2.如果有不能删除直接false
+        if (list.size() != 0) {
+            throw new EduException(20001, "此章节下有小节，先删除小节");
+        }
+        //3.删除章节
+        int i = baseMapper.deleteById(id);
+
+        return i == 1;
     }
 }
