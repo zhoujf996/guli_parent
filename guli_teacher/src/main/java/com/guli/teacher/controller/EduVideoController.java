@@ -65,6 +65,7 @@ public class EduVideoController {
     @DeleteMapping("{id}")
     public Result deleteById(@PathVariable String id) {
         Boolean flag = videoService.removeVideoById(id);
+        
         if (flag) {
             return Result.ok();
         } else {
