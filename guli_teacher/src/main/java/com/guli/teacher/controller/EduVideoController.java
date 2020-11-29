@@ -1,9 +1,11 @@
 package com.guli.teacher.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import com.guli.common.result.Result;
+import com.guli.teacher.entity.EduVideo;
+import com.guli.teacher.service.EduVideoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -14,8 +16,61 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-11-29
  */
 @RestController
-@RequestMapping("/teacher/edu-video")
+@RequestMapping("/video")
+@CrossOrigin
 public class EduVideoController {
 
+    @Autowired
+    private EduVideoService videoService;
+
+    /**
+     * 1.保存
+     */
+    @PostMapping("save")
+    public Result save(@RequestBody EduVideo video) {
+        boolean save = videoService.save(video);
+        if (save) {
+            return Result.ok();
+        } else {
+            return Result.error();
+
+        }
+    }
+
+
+    /**
+     * 2.根据ID查询video对象的 回显
+     */
+    @GetMapping("{id}")
+    public Result getVideoById(@PathVariable String id) {
+        EduVideo video = videoService.getById(id);
+        return Result.ok().data("video", video);
+    }
+
+    /**
+     * 3.修改
+     */
+    @PutMapping("update")
+    public Result update(@RequestBody EduVideo video) {
+        boolean update = videoService.updateById(video);
+        if (update) {
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
+
+    /**
+     * 4.删除
+     */
+    @DeleteMapping("{id}")
+    public Result deleteById(@PathVariable String id) {
+        Boolean flag = videoService.removeVideoById(id);
+        if (flag) {
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
 }
 
