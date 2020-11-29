@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.guli.teacher.entity.EduCourse;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.guli.teacher.entity.query.CourseQuery;
+import com.guli.teacher.entity.vo.CoursePublishVo;
 import com.guli.teacher.entity.vo.CourseVo;
 
 /**
@@ -55,4 +56,11 @@ public interface EduCourseService extends IService<EduCourse> {
      * @return
      */
     Boolean deleteById(String id);
+
+    /**
+     * 根据课程ID查询发布课程的详情
+     * @param id
+     * @return
+     */
+    CoursePublishVo getCoursePublishVoById(String id);
 }

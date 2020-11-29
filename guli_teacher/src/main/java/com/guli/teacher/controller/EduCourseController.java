@@ -7,6 +7,7 @@ import com.guli.common.result.Result;
 import com.guli.teacher.entity.EduCourse;
 import com.guli.teacher.entity.EduCourseDescription;
 import com.guli.teacher.entity.query.CourseQuery;
+import com.guli.teacher.entity.vo.CoursePublishVo;
 import com.guli.teacher.entity.vo.CourseVo;
 import com.guli.teacher.service.EduCourseDescriptionService;
 import com.guli.teacher.service.EduCourseService;
@@ -93,6 +94,15 @@ public class EduCourseController {
         } else {
             return Result.error();
         }
+    }
+
+    /**
+     * 根据课程ID查询发布课程的详情
+     */
+    @GetMapping("vo/{id}")
+    public Result getCoursePublishVoById(@PathVariable String id) {
+        CoursePublishVo vo = courseService.getCoursePublishVoById(id);
+        return Result.ok().data("coursePublishVo", vo);
     }
 }
 
