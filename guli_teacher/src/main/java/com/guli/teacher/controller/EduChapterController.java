@@ -2,6 +2,7 @@ package com.guli.teacher.controller;
 
 
 import com.guli.common.result.Result;
+import com.guli.teacher.entity.EduChapter;
 import com.guli.teacher.entity.vo.OneChapter;
 import com.guli.teacher.service.EduChapterService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.List;
 public class EduChapterController {
 
     @Autowired
-    private EduChapterService eduChapterService;
+    private EduChapterService chapterService;
 
     /**
      * 根据课程ID获取章节和小节列表
@@ -34,8 +35,37 @@ public class EduChapterController {
      */
     @GetMapping("{courseId}")
     public Result getChapterAndVideoById(@PathVariable String courseId) {
-        List<OneChapter> list = eduChapterService.getChapterAndVideoById(courseId);
+        List<OneChapter> list = chapterService.getChapterAndVideoById(courseId);
         return Result.ok().data("list", list);
     }
+
+    @PostMapping("save")
+    public Result save(@RequestBody EduChapter chapter) {
+        boolean save = chapterService.saveChapter(chapter);
+        if (save) {
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
+
+    @GetMapping("get/{id}")
+    public Result getById(@PathVariable String id) {
+        EduChapter chapter = chapterService.getById(id);
+        return Result.ok().data("chapter", chapter);
+    }
+
+    @PutMapping("update")
+    public Result updateById(@RequestBody EduChapter chapter) {
+        boolean b = chapterService.updateChapterById(chapter);
+        
+        if (b) { 
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
+
+
 }
 

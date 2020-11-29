@@ -23,4 +23,20 @@ public interface EduChapterService extends IService<EduChapter> {
      * @return
      */
     List<OneChapter> getChapterAndVideoById(String id);
+
+    /**
+     * 保存章节
+     * 判断保存的章节名称是否存在
+     * @param chapter
+     * @return
+     */
+    boolean saveChapter(EduChapter chapter);
+
+    /**
+     * 修改章节
+     * 修改时判断章节名称是否存在
+     * @param chapter
+     * @return
+     */
+    boolean updateChapterById(EduChapter chapter);
 }

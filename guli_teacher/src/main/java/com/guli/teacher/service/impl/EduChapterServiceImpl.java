@@ -5,6 +5,7 @@ import com.guli.teacher.entity.EduChapter;
 import com.guli.teacher.entity.EduVideo;
 import com.guli.teacher.entity.vo.OneChapter;
 import com.guli.teacher.entity.vo.TwoVideo;
+import com.guli.teacher.exception.EduException;
 import com.guli.teacher.mapper.EduChapterMapper;
 import com.guli.teacher.service.EduChapterService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -64,5 +65,47 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
             list.add(oneChapter);
         }
         return list;
+    }
+
+    /**
+     * @param chapter
+     * @return
+     */
+    @Override
+    public boolean saveChapter(EduChapter chapter) {
+        if (chapter == null) {
+            return false;
+        }
+        QueryWrapper<EduChapter> wrapper = new QueryWrapper<>();
+        wrapper.eq("title", chapter.getTitle());
+        Integer count = baseMapper.selectCount(wrapper);
+        if (count > 0) {
+            return false;
+        }
+        int insert = baseMapper.insert(chapter);
+
+        return insert == 1;
+    }
+
+    /**
+     * @param chapter
+     * @return
+     */
+    @Override
+    public boolean updateChapterById(EduChapter chapter) {
+        if (chapter == null) {
+            return false;
+        }
+        
+        QueryWrapper<EduChapter> wrapper = new QueryWrapper<>();
+        wrapper.eq("title", chapter.getTitle());
+        Integer count = baseMapper.selectCount(wrapper);
+        
+        if (count > 0) {
+            throw new EduException(20001,"章节名称已存在");
+        }
+        int i = baseMapper.updateById(chapter);
+
+        return i == 1;  
     }
 }
