@@ -33,7 +33,6 @@ public class EduVideoController {
             return Result.ok();
         } else {
             return Result.error();
-
         }
     }
 
