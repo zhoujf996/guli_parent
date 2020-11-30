@@ -7,6 +7,8 @@ import com.guli.teacher.entity.query.CourseQuery;
 import com.guli.teacher.entity.vo.CoursePublishVo;
 import com.guli.teacher.entity.vo.CourseVo;
 
+import java.util.Map;
+
 /**
  * <p>
  * 课程 服务类
@@ -58,16 +60,25 @@ public interface EduCourseService extends IService<EduCourse> {
     Boolean deleteById(String id);
 
     /**
-     * 根据课程ID查询发布课程的详情
+     * 根据课程ID查询发布课程的详情 方法一：vo实现
      * @param id
      * @return
      */
     CoursePublishVo getCoursePublishVoById(String id);
-
+    
     /**
-     * 根据课程ID修改课程状态
+     * 根据课程ID查询发布课程的详情 方法二：map实现
+     * @param id
+     * @return
+     */
+    Map<String, Object> getMapById(String id);
+    
+    /**
+     * 根据课程ID修改课程状态 
      * @param id
      * @return
      */
     Boolean updateStatusById(String id);
+
+
 }

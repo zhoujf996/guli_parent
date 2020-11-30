@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.Map;
+
 /**
  * <p>
  * 课程 服务实现类
@@ -147,13 +149,21 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
     }
 
     /**
-     * @param id
-     * @return
+     * 根据课程ID查询发布课程的详情 方法一：vo实现
      */
     @Override
     public CoursePublishVo getCoursePublishVoById(String id) {
         CoursePublishVo vo = baseMapper.getCoursePublishVoById(id);
         return vo;
+    }
+
+    /**
+     * 根据课程ID查询发布课程的详情 方法二：map实现
+     */
+    @Override
+    public Map<String, Object> getMapById(String id) {
+        Map<String, Object> map = baseMapper.getMapById(id);
+        return map;
     }
 
     /**

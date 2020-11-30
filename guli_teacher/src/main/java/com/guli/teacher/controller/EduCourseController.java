@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p>
  * 课程 前端控制器
@@ -97,12 +100,23 @@ public class EduCourseController {
     }
 
     /**
-     * 根据课程ID查询发布课程的详情
+     * 根据课程ID查询发布课程的详情 方法一：vo实现
+     */
+//    @GetMapping("vo/{id}")
+//    public Result getCoursePublishVoById(@PathVariable String id) {
+//        CoursePublishVo vo = courseService.getCoursePublishVoById(id);
+//        return Result.ok().data("coursePublishVo", vo);
+//    }
+
+
+    /**
+     * 根据课程ID查询发布课程的详情 方法二：
      */
     @GetMapping("vo/{id}")
     public Result getCoursePublishVoById(@PathVariable String id) {
-        CoursePublishVo vo = courseService.getCoursePublishVoById(id);
-        return Result.ok().data("coursePublishVo", vo);
+        Map<String, Object> map = courseService.getMapById(id);
+
+        return Result.ok().data("coursePublishVo", map);
     }
 
 
