@@ -104,5 +104,17 @@ public class EduCourseController {
         CoursePublishVo vo = courseService.getCoursePublishVoById(id);
         return Result.ok().data("coursePublishVo", vo);
     }
+
+
+    @GetMapping("updateStatusById/{id}")
+    public Result updateStatusById(@PathVariable String id) {
+        Boolean flag = courseService.updateStatusById(id);
+        if (flag) {
+            return Result.ok();
+        } else {
+            return Result.error();
+        }
+    }
+
 }
 

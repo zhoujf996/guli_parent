@@ -155,4 +155,18 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         CoursePublishVo vo = baseMapper.getCoursePublishVoById(id);
         return vo;
     }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public Boolean updateStatusById(String id) {
+        EduCourse course = new EduCourse();
+        course.setId(id);
+        course.setStatus("Normal");
+        int i = baseMapper.updateById(course);
+
+        return i == 1;
+    }
 }

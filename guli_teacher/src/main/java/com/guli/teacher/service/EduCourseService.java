@@ -63,4 +63,11 @@ public interface EduCourseService extends IService<EduCourse> {
      * @return
      */
     CoursePublishVo getCoursePublishVoById(String id);
+
+    /**
+     * 根据课程ID修改课程状态
+     * @param id
+     * @return
+     */
+    Boolean updateStatusById(String id);
 }
