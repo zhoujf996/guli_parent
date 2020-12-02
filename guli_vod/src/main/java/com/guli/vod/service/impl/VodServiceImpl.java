@@ -74,10 +74,7 @@ public class VodServiceImpl implements VodService {
             request.setVideoIds(videoSourceId);
 
             response = client.getAcsResponse(request);
-            List<String> list = response.getNonExistVideoIds();
-            if (list.size() == 0) {
-                return false;
-            }
+            
             return true;
         } catch (Exception e) {
             System.out.print("ErrorMessage = " + e.getLocalizedMessage());
