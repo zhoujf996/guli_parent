@@ -16,6 +16,7 @@ import java.util.List;
  */
 public interface EduChapterService extends IService<EduChapter> {
 
+    void removeByCourseId(String id);
 
     /**
      * 根据课程ID查询章节和小节列表

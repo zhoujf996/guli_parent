@@ -32,6 +32,13 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
     private EduVideoService eduVideoService;
 
     @Override
+    public void removeByCourseId(String id) {
+        QueryWrapper<EduChapter> wrapper = new QueryWrapper<>();
+        wrapper.eq("course_id", id);
+        baseMapper.delete(wrapper);
+    }
+
+    @Override
     public List<OneChapter> getChapterAndVideoById(String id) {
 
         List<OneChapter> list = new ArrayList<>();

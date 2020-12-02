@@ -2,6 +2,8 @@ package com.guli.vod.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface VodService {
 
     /**
@@ -17,5 +19,11 @@ public interface VodService {
      * @return
      */
     Boolean deleteVodById(String videoSourceId);
-    
+
+    /**
+     * 根据多个视频ID删除云端视频
+     * @param videoList
+     * @return
+     */
+    Boolean getRemoveListByIds(List videoList);
 }

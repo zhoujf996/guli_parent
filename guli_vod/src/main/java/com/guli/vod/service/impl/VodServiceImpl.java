@@ -74,7 +74,32 @@ public class VodServiceImpl implements VodService {
             request.setVideoIds(videoSourceId);
 
             response = client.getAcsResponse(request);
-            
+
+            return true;
+        } catch (Exception e) {
+            System.out.print("ErrorMessage = " + e.getLocalizedMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean getRemoveListByIds(List videoList) {
+        try {
+
+            DefaultAcsClient client = AliyunVodSDKUtil.initVodClient(
+                    ConstantPropertiesUtil.ACCESS_KEY_ID,
+                    ConstantPropertiesUtil.ACCESS_KEY_SECRET);
+
+            DeleteVideoResponse response = new DeleteVideoResponse();
+            DeleteVideoRequest request = new DeleteVideoRequest();
+
+            //支持传入多个视频ID，多个用逗号分隔
+            String str = org.apache.commons.lang.StringUtils.join(videoList, ",");
+            System.err.println("视频的IDS" + str);
+            request.setVideoIds(str);
+
+            response = client.getAcsResponse(request);
+
             return true;
         } catch (Exception e) {
             System.out.print("ErrorMessage = " + e.getLocalizedMessage());

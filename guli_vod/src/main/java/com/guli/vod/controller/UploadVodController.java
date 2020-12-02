@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("vod")
 @CrossOrigin
@@ -35,5 +37,21 @@ public class UploadVodController {
         }   
         return Result.error();
     }
+
+    /**
+     * 根据多个视频ID删除视频
+     * @param videoList
+     * @return
+     */
+    @DeleteMapping("removeList")
+    public Result getRemoveList(@RequestParam("videoList") List videoList) {
+        Boolean flag = vodService.getRemoveListByIds(videoList);
+
+        if (flag) {
+            return Result.ok();
+        }
+        return Result.error();
+    }
+
 
 }
