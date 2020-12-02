@@ -32,7 +32,7 @@ public class UploadVodController {
 
         if (flag) {
             return Result.ok();
-        }
+        }   
         return Result.error();
     }
 
