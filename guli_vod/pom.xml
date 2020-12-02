@@ -52,6 +52,11 @@
             <artifactId>aliyun-sdk-vod-upload</artifactId>
             <version>1.4.13</version>
         </dependency>
+        <!--服务注册-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <repositories>
